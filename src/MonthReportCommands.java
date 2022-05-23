@@ -7,9 +7,10 @@ public class MonthReportCommands {
     HashMap<Integer, ArrayList> allMonthMap = new HashMap<>();
 
 
-    public void MonthRecorder() {
+    public void monthRecorder() {
+        String directory = "resources";
         for (int i = 1; i < 4; i++) {
-            String path = "resources\\m.20210" + i + ".csv";
+        String path = directory + "\\m.20210" + i + ".csv";
         String content = reader.readFileContentsOrNull(path);
         String[] lines = content.split("\n");
         monthsArray = new ArrayList<>();
@@ -28,104 +29,39 @@ public class MonthReportCommands {
         }
     }
 
-
     void showAllMonthsStatistic() {
-        System.out.println("Информация за январь:");
-        showFirstMonthStatistic();
-        System.out.println("Информация за февраль:");
-        showSecondMonthStatistic();
-        System.out.println("Информация за март:");
-        showThirdMonthStatistic();
-    }
 
-    void showFirstMonthStatistic() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(1);
-        double profit = 0.0;
-        String itemName = "";
+        for (int i = 1; i < 4; i++) {
 
-        for (int i = 0; i < monthsArray.size(); i++) {
-            boolean isExpense = monthsArray.get(i).isExpense;
-            double quantity = monthsArray.get(i).quantity;
-            double sumOfOne = monthsArray.get(i).sumOfOne;
-            String maxItemName = monthsArray.get(i).itemName;
-            double maxProfit = quantity*sumOfOne;
-            if (isExpense == false && maxProfit > profit) {
-                profit = maxProfit;
-                itemName = maxItemName;
-            }
-        }
-        System.out.println("Самый прибыльный товар за месяц: " + itemName + ". Продано на " + profit + " рублей.");
-        double maxExpense = 0.0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            boolean isExpense = monthsArray.get(i).isExpense;
-            double expense = monthsArray.get(i).sumOfOne;
-            String maxItemName = monthsArray.get(i).itemName;
-            if(isExpense == true && expense > maxExpense) {
-                maxExpense = expense;
-                itemName = maxItemName;
-            }
-        }
-        System.out.println("Самая большая трата в месяце: " + itemName + ". Продано на " + maxExpense + " рублей.");
-    }
+            ArrayList<MonthlyReport> monthsArray = allMonthMap.get(i);
+            double profit = 0.0;
+            String itemName = "";
 
-    void showSecondMonthStatistic() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(2);
-        double profit = 0.0;
-        String itemName = "";
-
-        for (int i = 0; i < monthsArray.size(); i++) {
-            boolean isExpense = monthsArray.get(i).isExpense;
-            double quantity = monthsArray.get(i).quantity;
-            double sumOfOne = monthsArray.get(i).sumOfOne;
-            String maxItemName = monthsArray.get(i).itemName;
-            double maxProfit = quantity*sumOfOne;
-            if (isExpense == false && maxProfit > profit) {
-                profit = maxProfit;
-                itemName = maxItemName;
+            for (int j = 0; j < monthsArray.size(); j++) {
+                boolean isExpense = monthsArray.get(j).isExpense;
+                double quantity = monthsArray.get(j).quantity;
+                double sumOfOne = monthsArray.get(j).sumOfOne;
+                String maxItemName = monthsArray.get(j).itemName;
+                double maxProfit = quantity * sumOfOne;
+                if (!isExpense && maxProfit > profit) {
+                    profit = maxProfit;
+                    itemName = maxItemName;
+                }
             }
-        }
-        System.out.println("Самый прибыльный товар за месяц: " + itemName + ". Продано на " + profit + " рублей.");
-        double maxExpense = 0.0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            boolean isExpense = monthsArray.get(i).isExpense;
-            double expense = monthsArray.get(i).sumOfOne;
-            String maxItemName = monthsArray.get(i).itemName;
-            if(isExpense == true && expense > maxExpense) {
-                maxExpense = expense;
-                itemName = maxItemName;
+            System.out.println("Информация за " + i + "-й месяц:");
+            System.out.println("Самый прибыльный товар за месяц: " + itemName + ". Продано на " + profit + " рублей.");
+            double maxExpense = 0.0;
+            for (int m = 0; m < monthsArray.size(); m++) {
+                boolean isExpense = monthsArray.get(m).isExpense;
+                double expense = monthsArray.get(m).sumOfOne;
+                String maxItemName = monthsArray.get(m).itemName;
+                if (isExpense && expense > maxExpense) {
+                    maxExpense = expense;
+                    itemName = maxItemName;
+                }
             }
+            System.out.println("Самая большая трата в месяце: " + itemName + ". Потрачено " + maxExpense + " рублей.\n");
         }
-        System.out.println("Самая большая трата в месяце: " + itemName + ". Продано на " + maxExpense + " рублей.");
-    }
-
-    void showThirdMonthStatistic() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(3);
-        double profit = 0.0;
-        String itemName = "";
-
-        for (int i = 0; i < monthsArray.size(); i++) {
-            boolean isExpense = monthsArray.get(i).isExpense;
-            double quantity = monthsArray.get(i).quantity;
-            double sumOfOne = monthsArray.get(i).sumOfOne;
-            String maxItemName = monthsArray.get(i).itemName;
-            double maxProfit = quantity*sumOfOne;
-            if (isExpense == false && maxProfit > profit) {
-                profit = maxProfit;
-                itemName = maxItemName;
-            }
-        }
-        System.out.println("Самый прибыльный товар за месяц: " + itemName + ". Продано на " + profit + " рублей.");
-        double maxExpense = 0.0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            boolean isExpense = monthsArray.get(i).isExpense;
-            double expense = monthsArray.get(i).sumOfOne;
-            String maxItemName = monthsArray.get(i).itemName;
-            if(isExpense == true && expense > maxExpense) {
-                maxExpense = expense;
-                itemName = maxItemName;
-            }
-        }
-        System.out.println("Самая большая трата в месяце: " + itemName + ". Продано на " + maxExpense + " рублей.");
     }
 
     double firstMonthExpense() {
@@ -134,7 +70,7 @@ public class MonthReportCommands {
         for (int i = 0; i < monthsArray.size(); i++) {
             double expense = monthsArray.get(i).sumOfOne;
             boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumOfExpense += expense;
             }
         }
@@ -148,7 +84,7 @@ public class MonthReportCommands {
         for (int i = 0; i < monthsArray.size(); i++) {
             double expense = monthsArray.get(i).sumOfOne;
             boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumOfExpense += expense;
             }
         }
@@ -161,7 +97,7 @@ public class MonthReportCommands {
         for (int i = 0; i < monthsArray.size(); i++) {
             double expense = monthsArray.get(i).sumOfOne;
             boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumOfExpense += expense;
             }
         }
@@ -174,7 +110,7 @@ public class MonthReportCommands {
         for (int i = 0; i < monthsArray.size(); i++) {
             double income = monthsArray.get(i).sumOfOne;
             boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumOfIncome += income;
             }
         }
@@ -187,7 +123,7 @@ public class MonthReportCommands {
         for (int i = 0; i < monthsArray.size(); i++) {
             double income = monthsArray.get(i).sumOfOne;
             boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumOfIncome += income;
             }
         }
@@ -200,7 +136,7 @@ public class MonthReportCommands {
         for (int i = 0; i < monthsArray.size(); i++) {
             double income = monthsArray.get(i).sumOfOne;
             boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumOfIncome += income;
             }
         }

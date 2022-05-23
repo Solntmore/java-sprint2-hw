@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class YearReportCommands {
     FileReader reader = new FileReader();
     ArrayList<YearlyReport> yearArray = new ArrayList<>();
-    public void recorder() {
+    public void yearRecorder() {
         String path = "resources\\y.2021.csv";
         String content = reader.readFileContentsOrNull(path);
         String [] lines = content.split("\n");
@@ -21,15 +21,17 @@ public class YearReportCommands {
 
         }
 
-    /* есть идея сделать ветвление при выводе в зависимости от того, положительное, отрицательное или нулевое значение
-    profit. Соответственно, для каждого свой вариант вывода, ведь прибыли может и не быть в каком-то месяце.
-    Не стал реализовывать, чтобы не заграмождать код и не по тз. Стоило/стоит сделать? */
+    /* Так как в годовом отчете о каждом месяце по 2 строки(убытки и доходы), я сделал цикл шагающий через строку,
+     а внутри метода, который запускается в данном цикле выводится текущая и следующая строка, но не далее, чем 2 строки
+     от стартовой, чтобы все работало корректно и вывело ровно 3 месяца*/
     public void showYearStatistic() {
+        int monthNumber = 0;
 
         System.out.println("Информация о годовом отчете за 2021 год");
-        System.out.println("Прибыль за январь составила: " + FirstMonthProfit() + "рублей.");
-        System.out.println("Прибыль за январь составила: " + SecondMonthProfit() + "рублей.");
-        System.out.println("Прибыль за январь составила: " + ThirdMonthProfit() + "рублей.");
+        for (int i = 0; i < 5; i = i + 2) {
+            monthNumber +=1;
+            allMonthProfit(i, monthNumber);
+        }
         System.out.println("Средний расход за все месяцы в году составил: " + findAvarageExpense() + " рублей.");
         System.out.println("Средний доход за все месяцы в году составил: " + findAvarageIncome() + " рублей.");
 
@@ -37,13 +39,13 @@ public class YearReportCommands {
     }
 
     double findAvarageExpense() {
-        double avarageExpenses = 0.0;
+        double avarageExpenses;
         double sumMonths = 0.0;
         double sumExpenses = 0.0;
         for (int i = 0; i < yearArray.size(); i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumExpenses += amount;
                 sumMonths += 1.0;
             }
@@ -53,13 +55,13 @@ public class YearReportCommands {
     }
 
     double findAvarageIncome() {
-        double avarageIncome = 0.0;
+        double avarageIncome;
         double sumMonths = 0.0;
         double sumIncomes = 0.0;
         for (int i = 0; i < yearArray.size(); i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumIncomes += amount;
                 sumMonths += 1.0;
             }
@@ -68,55 +70,27 @@ public class YearReportCommands {
         return avarageIncome;
     }
 
-    double FirstMonthProfit () {
+    void allMonthProfit (int i, int monthNumber) {
         double totalProfit = 0.0;
-        for (int i = 0; i < 1; i++) {
-            boolean isExpense = yearArray.get(i).isExpense;
-            double amount = yearArray.get(i).amount;
-
-            if(isExpense == false) {
+        int monthCounter = 0;
+        for (int m = i; m < i + 2 && i < 6; m++) {
+            boolean isExpense = yearArray.get(m).isExpense;
+            double amount = yearArray.get(m).amount;
+            monthCounter += 1;
+            if (!isExpense) {
                 totalProfit += amount;
             } else {
                 totalProfit -= amount;
             }
 
-        }
-        return totalProfit;
-
-    }
-
-    double SecondMonthProfit () {
-        double totalProfit = 0.0;
-        for (int i = 2; i < 3; i++) {
-            boolean isExpense = yearArray.get(i).isExpense;
-            double amount = yearArray.get(i).amount;
-
-            if(isExpense == false) {
-                totalProfit += amount;
-            } else {
-                totalProfit -= amount;
+            if (monthCounter % 2 != 0) {
+                if (totalProfit > 0) {
+                    System.out.println("Прибыль за " + monthNumber + "-й месяц составила: " + totalProfit + "рублей.");
+                } else if (totalProfit < 0) {
+                    System.out.println("Убыток за " + monthNumber + "-й месяц составил: " + totalProfit + "рублей.");
+                }
             }
-
         }
-        return totalProfit;
-
-    }
-
-    double ThirdMonthProfit () {
-        double totalProfit = 0.0;
-        for (int i = 4; i < 5; i++) {
-            boolean isExpense = yearArray.get(i).isExpense;
-            double amount = yearArray.get(i).amount;
-
-            if(isExpense == false) {
-                totalProfit += amount;
-            } else {
-                totalProfit -= amount;
-            }
-
-        }
-        return totalProfit;
-
     }
 
     double firstMonthExpense() {
@@ -124,7 +98,7 @@ public class YearReportCommands {
         for (int i = 0; i < 1; i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumOfExpense += amount;
             }
         }
@@ -136,7 +110,7 @@ public class YearReportCommands {
         for (int i = 2; i < 3; i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumOfExpense += amount;
             }
         }
@@ -148,7 +122,7 @@ public class YearReportCommands {
         for (int i = 4; i < 5; i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == true) {
+            if(isExpense) {
                 sumOfExpense += amount;
             }
         }
@@ -160,7 +134,7 @@ public class YearReportCommands {
         for (int i = 0; i < 1; i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumOfIncome += amount;
             }
         }
@@ -172,7 +146,7 @@ public class YearReportCommands {
         for (int i = 2; i < 3; i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumOfIncome += amount;
             }
         }
@@ -184,7 +158,7 @@ public class YearReportCommands {
         for (int i = 4; i < 5; i++) {
             boolean isExpense = yearArray.get(i).isExpense;
             double amount = yearArray.get(i).amount;
-            if(isExpense == false) {
+            if(!isExpense) {
                 sumOfIncome += amount;
             }
         }
