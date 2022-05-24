@@ -23,24 +23,17 @@ public class Main {
 
                 } else if (command.equals("3")) {
                     try {
-
-                        if (yearReportCommands.firstMonthExpense() != monthReportCommands.firstMonthExpense() ||
-                                yearReportCommands.firstMonthIncome() != monthReportCommands.firstMonthIncome()) {
-                            System.out.println("В первом месяце обнаружены расхождения");
-                        }
-                        if (yearReportCommands.secondMonthExpense() != monthReportCommands.secondMonthExpense() ||
-                                yearReportCommands.secondMonthIncome() != monthReportCommands.secondMonthIncome()) {
-                            System.out.println("Во втором месяце обнаружены расхождения");
-                        }
-                        if (yearReportCommands.thirdMonthExpense() != monthReportCommands.thirdMonthExpense() ||
-                                yearReportCommands.thirdMonthIncome() != monthReportCommands.thirdMonthIncome()) {
-                            System.out.println("В третьем месяце обнаружены расхождения");
+                        for(int i = 1; i < 4; i++) {
+                            if (yearReportCommands.findMonthExpense(i) != monthReportCommands.findMonthExpense(i) ||
+                                    yearReportCommands.findMonthIncome(i) != monthReportCommands.findMonthIncome(i)) {
+                                System.out.println("В месяце " + i + " обнаружены расхождения");
+                            }
                         }
                         System.out.println("Проверка успешно завершена. Если вы не видите сообщений об ошибке," +
                                 " значит проверка прошла успешно.");
                         System.out.println("Если они есть, проверьте отчетность и повторите операцию.\n");
 
-                    } catch (IndexOutOfBoundsException e) {
+                    } catch (NullPointerException e) {
                         System.out.println("Вы не считали отчеты. Перед сверкой, считайте оба отчета, " +
                                 "затем повторите операцию\n");
                     }

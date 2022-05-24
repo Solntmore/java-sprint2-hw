@@ -4,13 +4,13 @@ import java.util.HashMap;
 public class MonthReportCommands {
     FileReader reader = new FileReader();
     ArrayList<MonthlyReport> monthsArray;
-    HashMap<Integer, ArrayList> allMonthMap = new HashMap<>();
+    HashMap<Integer, ArrayList<MonthlyReport>> allMonthMap = new HashMap<>();
 
-
+    private static final String  DIRECTORY = "resources";
     public void monthRecorder() {
-        String directory = "resources";
+
         for (int i = 1; i < 4; i++) {
-        String path = directory + "\\m.20210" + i + ".csv";
+        String path = DIRECTORY + "\\m.20210" + i + ".csv";
         String content = reader.readFileContentsOrNull(path);
         String[] lines = content.split("\n");
         monthsArray = new ArrayList<>();
@@ -35,113 +35,54 @@ public class MonthReportCommands {
 
             ArrayList<MonthlyReport> monthsArray = allMonthMap.get(i);
             double profit = 0.0;
-            String itemName = "";
-
-            for (int j = 0; j < monthsArray.size(); j++) {
-                boolean isExpense = monthsArray.get(j).isExpense;
-                double quantity = monthsArray.get(j).quantity;
-                double sumOfOne = monthsArray.get(j).sumOfOne;
-                String maxItemName = monthsArray.get(j).itemName;
+            String profitItemName = "";
+            String expenseItemName = "";
+            double maxExpense = 0.0;
+            for (MonthlyReport monthlyReport : monthsArray) {
+                boolean isExpense = monthlyReport.isExpense;
+                double quantity = monthlyReport.quantity;
+                double sumOfOne = monthlyReport.sumOfOne;
+                String maxItemName = monthlyReport.itemName;
                 double maxProfit = quantity * sumOfOne;
                 if (!isExpense && maxProfit > profit) {
                     profit = maxProfit;
-                    itemName = maxItemName;
+                    profitItemName = maxItemName;
+                }
+                if (isExpense && sumOfOne > maxExpense) {
+                    maxExpense = sumOfOne;
+                    expenseItemName = maxItemName;
                 }
             }
-            System.out.println("Информация за " + i + "-й месяц:");
-            System.out.println("Самый прибыльный товар за месяц: " + itemName + ". Продано на " + profit + " рублей.");
-            double maxExpense = 0.0;
-            for (int m = 0; m < monthsArray.size(); m++) {
-                boolean isExpense = monthsArray.get(m).isExpense;
-                double expense = monthsArray.get(m).sumOfOne;
-                String maxItemName = monthsArray.get(m).itemName;
-                if (isExpense && expense > maxExpense) {
-                    maxExpense = expense;
-                    itemName = maxItemName;
-                }
-            }
-            System.out.println("Самая большая трата в месяце: " + itemName + ". Потрачено " + maxExpense + " рублей.\n");
+                System.out.println("Информация за " + i + "-й месяц:");
+                System.out.println("Самый прибыльный товар за месяц: " + profitItemName + ". Продано на " + profit + " рублей.");
+                System.out.println("Самая большая трата в месяце: " + expenseItemName + ". Потрачено " + maxExpense
+                        + " рублей.\n");
         }
     }
 
-    double firstMonthExpense() {
-    ArrayList<MonthlyReport> monthsArray = allMonthMap.get(1);
+    double findMonthExpense(int i) {
+    ArrayList<MonthlyReport> monthsArray = allMonthMap.get(i);
     double sumOfExpense = 0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            double expense = monthsArray.get(i).sumOfOne;
-            boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense) {
+        for (MonthlyReport monthlyReport : monthsArray) {
+            double expense = monthlyReport.sumOfOne;
+            boolean isExpense = monthlyReport.isExpense;
+            if (isExpense) {
                 sumOfExpense += expense;
             }
         }
         return sumOfExpense;
     }
 
-
-    double secondMonthExpense() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(2);
-        double sumOfExpense = 0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            double expense = monthsArray.get(i).sumOfOne;
-            boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense) {
-                sumOfExpense += expense;
-            }
-        }
-        return sumOfExpense;
-    }
-
-    double thirdMonthExpense() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(3);
-        double sumOfExpense = 0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            double expense = monthsArray.get(i).sumOfOne;
-            boolean isExpense = monthsArray.get(i).isExpense;
-            if(isExpense) {
-                sumOfExpense += expense;
-            }
-        }
-        return sumOfExpense;
-    }
-
-    double firstMonthIncome() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(1);
+    double findMonthIncome(int i) {
+        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(i);
         double sumOfIncome = 0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            double income = monthsArray.get(i).sumOfOne;
-            boolean isExpense = monthsArray.get(i).isExpense;
-            if(!isExpense) {
+        for (MonthlyReport monthlyReport : monthsArray) {
+            double income = monthlyReport.sumOfOne;
+            boolean isExpense = monthlyReport.isExpense;
+            if (!isExpense) {
                 sumOfIncome += income;
             }
         }
         return sumOfIncome;
     }
-
-    double secondMonthIncome() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(2);
-        double sumOfIncome = 0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            double income = monthsArray.get(i).sumOfOne;
-            boolean isExpense = monthsArray.get(i).isExpense;
-            if(!isExpense) {
-                sumOfIncome += income;
-            }
-        }
-        return sumOfIncome;
-    }
-
-    double thirdMonthIncome() {
-        ArrayList<MonthlyReport> monthsArray = allMonthMap.get(3);
-        double sumOfIncome = 0;
-        for (int i = 0; i < monthsArray.size(); i++) {
-            double income = monthsArray.get(i).sumOfOne;
-            boolean isExpense = monthsArray.get(i).isExpense;
-            if(!isExpense) {
-                sumOfIncome += income;
-            }
-        }
-        return sumOfIncome;
-    }
-
-
 }
