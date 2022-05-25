@@ -12,6 +12,10 @@ public class MonthReportCommands {
         for (int i = 1; i < 4; i++) {
         String path = DIRECTORY + "\\m.20210" + i + ".csv";
         String content = reader.readFileContentsOrNull(path);
+            if (content == null) {
+                System.out.println("не удалось считать отчет по пути " + path);
+                return;
+            }
         String[] lines = content.split("\n");
         monthsArray = new ArrayList<>();
             for (int j = 1; j < lines.length; j++) {
@@ -39,10 +43,10 @@ public class MonthReportCommands {
             String expenseItemName = "";
             double maxExpense = 0.0;
             for (MonthlyReport monthlyReport : monthsArray) {
-                boolean isExpense = monthlyReport.isExpense;
-                double quantity = monthlyReport.quantity;
-                double sumOfOne = monthlyReport.sumOfOne;
-                String maxItemName = monthlyReport.itemName;
+                boolean isExpense = monthlyReport.getIsExpense();
+                double quantity = monthlyReport.getQuantity();
+                double sumOfOne = monthlyReport.getSumOfOne();
+                String maxItemName = monthlyReport.getItemName();
                 double maxProfit = quantity * sumOfOne;
                 if (!isExpense && maxProfit > profit) {
                     profit = maxProfit;
@@ -64,8 +68,8 @@ public class MonthReportCommands {
     ArrayList<MonthlyReport> monthsArray = allMonthMap.get(i);
     double sumOfExpense = 0;
         for (MonthlyReport monthlyReport : monthsArray) {
-            double expense = monthlyReport.sumOfOne;
-            boolean isExpense = monthlyReport.isExpense;
+            double expense = monthlyReport.getSumOfOne();
+            boolean isExpense = monthlyReport.getIsExpense();
             if (isExpense) {
                 sumOfExpense += expense;
             }
@@ -77,8 +81,8 @@ public class MonthReportCommands {
         ArrayList<MonthlyReport> monthsArray = allMonthMap.get(i);
         double sumOfIncome = 0;
         for (MonthlyReport monthlyReport : monthsArray) {
-            double income = monthlyReport.sumOfOne;
-            boolean isExpense = monthlyReport.isExpense;
+            double income = monthlyReport.getSumOfOne();
+            boolean isExpense = monthlyReport.getIsExpense();
             if (!isExpense) {
                 sumOfIncome += income;
             }
